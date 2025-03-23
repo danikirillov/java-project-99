@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: app
+  output:
+    ansi:
+      enabled: always
+server:
+  port: 8080
+#logging:
+#  level:
+#    root: WARN
+#    org:
+#      springframework:
+#        web: DEBUG
+#        security: DEBUG
