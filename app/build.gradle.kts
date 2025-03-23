@@ -2,8 +2,7 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
-	java
-	jacoco
+	application
 	id("org.springframework.boot") version "3.4.4"
 	id("io.spring.dependency-management") version "1.1.7"
 	id("org.sonarqube") version "6.0.1.5171"
@@ -26,6 +25,8 @@ java {
 	}
 }
 
+application { mainClass.set("hexlet.code.AppApplication") }
+
 repositories {
 	mavenCentral()
 }
@@ -41,7 +42,6 @@ tasks.withType<Test> {
 	useJUnitPlatform()
 }
 
-
 tasks.test {
 	useJUnitPlatform()
 	testLogging {
@@ -50,5 +50,3 @@ tasks.test {
 		showStandardStreams = true
 	}
 }
-
-tasks.jacocoTestReport { reports { xml.required.set(true) } }
