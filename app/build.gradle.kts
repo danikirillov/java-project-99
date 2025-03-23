@@ -25,7 +25,7 @@ java {
 	}
 }
 
-application { mainClass.set("hexlet.code.AppApplication") }
+application { mainClass.set("hexlet.code.app.AppApplication") }
 
 repositories {
 	mavenCentral()
