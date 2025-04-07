@@ -3,10 +3,10 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
 	application
-	id("org.springframework.boot") version "3.4.4"
-	id("io.spring.dependency-management") version "1.1.7"
-	id("org.sonarqube") version "6.0.1.5171"
-	id("io.freefair.lombok") version "8.6"
+	alias(libs.plugins.spring.boot)
+	alias(libs.plugins.spring.dependency.management)
+	alias(libs.plugins.sonarqube)
+	alias(libs.plugins.lombok)
 }
 
 sonar {
@@ -33,13 +33,30 @@ repositories {
 }
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("org.springframework.boot:spring-boot-starter-web")
-	runtimeOnly("com.h2database:h2")
-	runtimeOnly("org.postgresql:postgresql")
+	implementation(libs.spring.boot.starter.web)
+	implementation(libs.spring.boot.starter.data.jpa)
+	implementation(libs.spring.boot.starter.validation)
+	implementation(libs.spring.boot.starter.security)
+	implementation(libs.spring.boot.starter.oauth2.resource.server)
+	implementation(libs.spring.boot.starter.jdbc)
+	implementation(libs.jackson.databind.nullable)
+	
+	// MapStruct
+	implementation(libs.mapstruct)
+	annotationProcessor(libs.mapstruct.processor)
+	
+	runtimeOnly(libs.h2)
+	runtimeOnly(libs.postgresql)
 //	developmentOnly("org.springframework.boot:spring-boot-devtools")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	
+	// Test dependencies
+	testImplementation(libs.spring.boot.starter.test)
+    testImplementation(libs.spring.security.test)
+    testImplementation(libs.instancio.junit)
+    testImplementation(libs.json.unit.assertj)
+    testImplementation(libs.datafaker)
+	testImplementation(platform(libs.junit.bom))
+	testImplementation(libs.junit.jupiter)
 }
 
 tasks.withType<Test> {
