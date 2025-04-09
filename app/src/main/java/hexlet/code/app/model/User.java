@@ -16,6 +16,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -44,9 +45,9 @@ public class User implements UserDetails {
     private String email;
     private String password;
     @CreatedDate
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
     @LastModifiedDate
-    private LocalDateTime updatedAt;
+    private LocalDate updatedAt;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
