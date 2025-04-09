@@ -6,6 +6,11 @@ spring:
       enabled: always
 server:
   port: 8080
+# it's not a real project and i don't want to bother myself with secrets configuration
+# DO NOT STORE KEYS IN THE RESOURCES
+rsa:
+  private-key: classpath:certs/private.pem
+  public-key: classpath:certs/public.pem
 #logging:
 #  level:
 #    root: WARN
