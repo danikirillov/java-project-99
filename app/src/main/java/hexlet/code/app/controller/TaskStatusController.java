@@ -29,14 +29,14 @@ public class TaskStatusController {
 
     @GetMapping
     public ResponseEntity<List<TaskStatusResponseDto>> getAll(
-            @RequestParam(defaultValue = "1") Integer page,
-            @RequestParam(defaultValue = "10") Integer limit) {
+        @RequestParam(defaultValue = "1") Integer page,
+        @RequestParam(defaultValue = "10") Integer limit) {
         var statuses = taskStatusService.getAllTaskStatuses();
         var skip = (page - 1) * limit;
         var statusesFiltered = statuses.stream().skip(skip).limit(limit).toList();
         return ResponseEntity.ok()
-                .header("X-Total-Count", String.valueOf(statuses.size()))
-                .body(statusesFiltered);
+            .header("X-Total-Count", String.valueOf(statuses.size()))
+            .body(statusesFiltered);
     }
 
     @GetMapping("/{id}")

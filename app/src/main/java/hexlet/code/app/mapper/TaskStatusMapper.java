@@ -18,6 +18,8 @@ import org.mapstruct.ReportingPolicy;
 )
 public abstract class TaskStatusMapper {
     public abstract TaskStatusResponseDto toDto(TaskStatus taskStatus);
+
     public abstract TaskStatus toEntity(TaskStatusCreateDto dto);
+
     public abstract void updateEntity(@MappingTarget TaskStatus taskStatus, TaskStatusUpdateDto dto);
 } 

@@ -5,7 +5,6 @@ import hexlet.code.app.dto.TaskStatusResponseDto;
 import hexlet.code.app.dto.TaskStatusUpdateDto;
 import hexlet.code.app.exception.TaskStatusNotFoundException;
 import hexlet.code.app.mapper.TaskStatusMapper;
-import hexlet.code.app.model.TaskStatus;
 import hexlet.code.app.repository.TaskStatusRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,15 +19,15 @@ public class TaskStatusService {
 
     public List<TaskStatusResponseDto> getAllTaskStatuses() {
         return taskStatusRepository.findAll()
-                .stream()
-                .map(taskStatusMapper::toDto)
-                .toList();
+            .stream()
+            .map(taskStatusMapper::toDto)
+            .toList();
     }
 
     public TaskStatusResponseDto getTaskStatusById(Long id) throws TaskStatusNotFoundException {
         return taskStatusRepository.findById(id)
-                .map(taskStatusMapper::toDto)
-                .orElseThrow(() -> new TaskStatusNotFoundException(id));
+            .map(taskStatusMapper::toDto)
+            .orElseThrow(() -> new TaskStatusNotFoundException(id));
     }
 
     public TaskStatusResponseDto createTaskStatus(TaskStatusCreateDto dto) {
@@ -39,7 +38,7 @@ public class TaskStatusService {
 
     public TaskStatusResponseDto updateTaskStatus(Long id, TaskStatusUpdateDto dto) throws TaskStatusNotFoundException {
         var taskStatus = taskStatusRepository.findById(id)
-                .orElseThrow(() -> new TaskStatusNotFoundException(id));
+            .orElseThrow(() -> new TaskStatusNotFoundException(id));
 
         taskStatusMapper.updateEntity(taskStatus, dto);
         var updatedTaskStatus = taskStatusRepository.save(taskStatus);
