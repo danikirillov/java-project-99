@@ -21,5 +21,7 @@ public abstract class TaskStatusMapper {
 
     public abstract TaskStatus toEntity(TaskStatusCreateDto dto);
 
+    public abstract TaskStatus toEntity(TaskStatusResponseDto dto);
+
     public abstract void updateEntity(@MappingTarget TaskStatus taskStatus, TaskStatusUpdateDto dto);
 } 
