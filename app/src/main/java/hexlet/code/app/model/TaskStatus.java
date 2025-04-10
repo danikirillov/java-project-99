@@ -6,6 +6,8 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,49 +15,40 @@ import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.List;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Table(name = "users")
+@Table(name = "task_statuses")
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(onlyExplicitlyIncluded = true)
-public class User implements UserDetails {
+public class TaskStatus {
     @Id
     @EqualsAndHashCode.Include
     @ToString.Include
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
-    @ToString.Include
-    private String firstName;
-    @ToString.Include
-    private String lastName;
-    @ToString.Include
+
+    @NotBlank
+    @Size(min = 1)
     @Column(unique = true)
-    private String email;
-    private String password;
+    @ToString.Include
+    private String name;
+
+    @NotBlank
+    @Size(min = 1)
+    @Column(unique = true)
+    @ToString.Include
+    private String slug;
+
     @CreatedDate
     private LocalDate createdAt;
+
     @LastModifiedDate
     private LocalDate updatedAt;
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
-    }
-
-    @Override
-    public String getUsername() {
-        return email;
-    }
-
-}
+} 
