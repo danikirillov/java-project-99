@@ -3,6 +3,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
 	application
+	jacoco
 	alias(libs.plugins.spring.boot)
 	alias(libs.plugins.spring.dependency.management)
 	alias(libs.plugins.sonarqube)
@@ -40,7 +41,7 @@ dependencies {
 	implementation(libs.spring.boot.starter.oauth2.resource.server)
 	implementation(libs.spring.boot.starter.jdbc)
 	implementation(libs.jackson.databind.nullable)
-	
+
 	// MapStruct
 	implementation(libs.mapstruct)
 	annotationProcessor(libs.mapstruct.processor)
@@ -58,6 +59,8 @@ dependencies {
 	testImplementation(platform(libs.junit.bom))
 	testImplementation(libs.junit.jupiter)
 }
+
+tasks.jacocoTestReport { reports { xml.required.set(true) } }
 
 tasks.withType<Test> {
 	useJUnitPlatform()
