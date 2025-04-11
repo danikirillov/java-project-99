@@ -16,5 +16,6 @@ public class UserUpdateRequest {
     private JsonNullable<String> firstName;
     private JsonNullable<String> lastName;
     @Size(min = 3)
+    @NotBlank
     private JsonNullable<String> password;
 } 

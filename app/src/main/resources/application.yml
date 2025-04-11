@@ -11,10 +11,8 @@ server:
 rsa:
   private-key: classpath:certs/private.pem
   public-key: classpath:certs/public.pem
-#logging:
-#  level:
-#    root: WARN
-#    org:
-#      springframework:
-#        web: DEBUG
-#        security: DEBUG
+logging:
+  level:
+    root: INFO
+    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
+    org.springframework.web: DEBUG

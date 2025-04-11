@@ -9,6 +9,7 @@ import hexlet.code.app.mapper.JsonNullableMapper;
 import hexlet.code.app.mapper.TaskMapper;
 import hexlet.code.app.repository.TaskRepository;
 import hexlet.code.app.repository.TaskStatusRepository;
+import hexlet.code.app.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ import java.util.List;
 public class TaskService {
     private final TaskRepository taskRepository;
     private final TaskStatusRepository taskStatusRepository;
+    private final UserRepository userRepository;
     private final TaskMapper taskMapper;
     private final JsonNullableMapper jsonNullableMapper;
 
@@ -36,9 +38,16 @@ public class TaskService {
 
     public TaskResponse createTask(TaskCreateRequest request) {
         var task = taskMapper.toEntity(request);
-        var status = taskStatusRepository.findByName(request.getStatus())
+
+        var status = taskStatusRepository.findBySlug(request.getStatus())
             .orElseThrow(() -> new TaskStatusNotFoundException(request.getStatus()));
         task.setTaskStatus(status);
+
+        if (request.getAssigneeId() != null) {
+            var assignee = userRepository.findById(request.getAssigneeId()).get();
+            task.setAssignee(assignee);
+        }
+
         var savedTask = taskRepository.save(task);
         return taskMapper.toResponse(savedTask);
     }

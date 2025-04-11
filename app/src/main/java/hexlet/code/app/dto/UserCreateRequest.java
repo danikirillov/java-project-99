@@ -13,5 +13,6 @@ public class UserCreateRequest {
     private String firstName;
     private String lastName;
     @Size(min = 3)
+    @NotBlank
     private String password;
 } 
