@@ -1,8 +1,8 @@
 package hexlet.code.app.service;
 
-import hexlet.code.app.dto.TaskStatusCreateDto;
-import hexlet.code.app.dto.TaskStatusResponseDto;
-import hexlet.code.app.dto.TaskStatusUpdateDto;
+import hexlet.code.app.dto.TaskStatusCreateRequest;
+import hexlet.code.app.dto.TaskStatusResponse;
+import hexlet.code.app.dto.TaskStatusUpdate;
 import hexlet.code.app.exception.TaskStatusNotFoundException;
 import hexlet.code.app.mapper.TaskStatusMapper;
 import hexlet.code.app.repository.TaskStatusRepository;
@@ -17,26 +17,26 @@ public class TaskStatusService {
     private final TaskStatusRepository taskStatusRepository;
     private final TaskStatusMapper taskStatusMapper;
 
-    public List<TaskStatusResponseDto> getAllTaskStatuses() {
+    public List<TaskStatusResponse> getAllTaskStatuses() {
         return taskStatusRepository.findAll()
             .stream()
             .map(taskStatusMapper::toDto)
             .toList();
     }
 
-    public TaskStatusResponseDto getTaskStatusById(Long id) throws TaskStatusNotFoundException {
+    public TaskStatusResponse getTaskStatusById(Long id) throws TaskStatusNotFoundException {
         return taskStatusRepository.findById(id)
             .map(taskStatusMapper::toDto)
             .orElseThrow(() -> new TaskStatusNotFoundException(id));
     }
 
-    public TaskStatusResponseDto createTaskStatus(TaskStatusCreateDto dto) {
+    public TaskStatusResponse createTaskStatus(TaskStatusCreateRequest dto) {
         var taskStatus = taskStatusMapper.toEntity(dto);
         taskStatus = taskStatusRepository.save(taskStatus);
         return taskStatusMapper.toDto(taskStatus);
     }
 
-    public TaskStatusResponseDto updateTaskStatus(Long id, TaskStatusUpdateDto dto) throws TaskStatusNotFoundException {
+    public TaskStatusResponse updateTaskStatus(Long id, TaskStatusUpdate dto) throws TaskStatusNotFoundException {
         var taskStatus = taskStatusRepository.findById(id)
             .orElseThrow(() -> new TaskStatusNotFoundException(id));
 

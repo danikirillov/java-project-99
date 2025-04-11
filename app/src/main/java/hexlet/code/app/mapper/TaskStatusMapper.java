@@ -1,8 +1,8 @@
 package hexlet.code.app.mapper;
 
-import hexlet.code.app.dto.TaskStatusCreateDto;
-import hexlet.code.app.dto.TaskStatusResponseDto;
-import hexlet.code.app.dto.TaskStatusUpdateDto;
+import hexlet.code.app.dto.TaskStatusCreateRequest;
+import hexlet.code.app.dto.TaskStatusResponse;
+import hexlet.code.app.dto.TaskStatusUpdate;
 import hexlet.code.app.model.TaskStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
@@ -17,11 +17,11 @@ import org.mapstruct.ReportingPolicy;
     uses = {JsonNullableMapper.class}
 )
 public abstract class TaskStatusMapper {
-    public abstract TaskStatusResponseDto toDto(TaskStatus taskStatus);
+    public abstract TaskStatusResponse toDto(TaskStatus taskStatus);
 
-    public abstract TaskStatus toEntity(TaskStatusCreateDto dto);
+    public abstract TaskStatus toEntity(TaskStatusCreateRequest dto);
 
-    public abstract TaskStatus toEntity(TaskStatusResponseDto dto);
+    public abstract TaskStatus toEntity(TaskStatusResponse dto);
 
-    public abstract void updateEntity(@MappingTarget TaskStatus taskStatus, TaskStatusUpdateDto dto);
+    public abstract void updateEntity(@MappingTarget TaskStatus taskStatus, TaskStatusUpdate dto);
 } 

@@ -1,15 +1,18 @@
 package hexlet.code.app.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import org.openapitools.jackson.nullable.JsonNullable;
 
 @Getter
 @Setter
-public class TaskStatusUpdateDto {
+public class TaskStatusCreateRequest {
+    @NotBlank
     @Size(min = 1)
-    private JsonNullable<String> name;
+    private String name;
+
+    @NotBlank
     @Size(min = 1)
-    private JsonNullable<String> slug;
+    private String slug;
 } 

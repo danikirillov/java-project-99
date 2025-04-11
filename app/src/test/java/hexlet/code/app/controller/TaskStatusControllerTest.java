@@ -2,8 +2,8 @@ package hexlet.code.app.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hexlet.code.app.dto.TaskStatusResponseDto;
-import hexlet.code.app.dto.TaskStatusUpdateDto;
+import hexlet.code.app.dto.TaskStatusResponse;
+import hexlet.code.app.dto.TaskStatusUpdate;
 import hexlet.code.app.mapper.TaskStatusMapper;
 import hexlet.code.app.model.TaskStatus;
 import hexlet.code.app.repository.TaskStatusRepository;
@@ -83,7 +83,7 @@ class TaskStatusControllerTest {
             .getResponse();
         var body = response.getContentAsString();
 
-        List<TaskStatusResponseDto> statusDtos = om.readValue(body, new TypeReference<>() {
+        List<TaskStatusResponse> statusDtos = om.readValue(body, new TypeReference<>() {
         });
 
         var actual = statusDtos.stream().map(taskStatusMapper::toEntity).toList();
@@ -112,7 +112,7 @@ class TaskStatusControllerTest {
 
     @Test
     void testUpdate() throws Exception {
-        var data = new TaskStatusUpdateDto();
+        var data = new TaskStatusUpdate();
         data.setName(JsonNullable.of("New Status"));
 
         var request = put("/api/task_statuses/" + testStatus.getId())

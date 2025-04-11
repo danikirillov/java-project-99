@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-public class TaskStatusResponseDto {
+public class TaskStatusResponse {
     private Long id;
     private String name;
     private String slug;

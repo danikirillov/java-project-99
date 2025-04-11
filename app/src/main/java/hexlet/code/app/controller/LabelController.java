@@ -1,9 +1,9 @@
 package hexlet.code.app.controller;
 
-import hexlet.code.app.dto.TaskStatusCreateRequest;
-import hexlet.code.app.dto.TaskStatusResponse;
-import hexlet.code.app.dto.TaskStatusUpdate;
-import hexlet.code.app.service.TaskStatusService;
+import hexlet.code.app.dto.LabelCreateRequest;
+import hexlet.code.app.dto.LabelResponse;
+import hexlet.code.app.dto.LabelUpdateRequest;
+import hexlet.code.app.service.LabelService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,44 +22,44 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/task_statuses")
+@RequestMapping("/api/labels")
 @RequiredArgsConstructor
-public class TaskStatusController {
-    private final TaskStatusService taskStatusService;
+public class LabelController {
+    private final LabelService labelService;
 
     @GetMapping
-    public ResponseEntity<List<TaskStatusResponse>> getAll(
+    public ResponseEntity<List<LabelResponse>> getAllLabels(
         @RequestParam(defaultValue = "1") Integer page,
         @RequestParam(defaultValue = "10") Integer limit) {
-        var statuses = taskStatusService.getAllTaskStatuses();
+        var labels = labelService.getAllLabels();
         var skip = (page - 1) * limit;
-        var statusesFiltered = statuses.stream().skip(skip).limit(limit).toList();
+        var labelsFiltered = labels.stream().skip(skip).limit(limit).toList();
         return ResponseEntity.ok()
-            .header("X-Total-Count", String.valueOf(statuses.size()))
-            .body(statusesFiltered);
+            .header("X-Total-Count", String.valueOf(labels.size()))
+            .body(labelsFiltered);
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public TaskStatusResponse getTaskStatus(@PathVariable Long id) {
-        return taskStatusService.getTaskStatusById(id);
+    public LabelResponse getLabelById(@PathVariable Long id) {
+        return labelService.getLabelById(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TaskStatusResponse createTaskStatus(@Valid @RequestBody TaskStatusCreateRequest dto) {
-        return taskStatusService.createTaskStatus(dto);
+    public LabelResponse createLabel(@Valid @RequestBody LabelCreateRequest request) {
+        return labelService.createLabel(request);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public TaskStatusResponse updateTaskStatus(@PathVariable Long id, @Valid @RequestBody TaskStatusUpdate dto) {
-        return taskStatusService.updateTaskStatus(id, dto);
+    public LabelResponse updateLabel(@PathVariable Long id, @Valid @RequestBody LabelUpdateRequest request) {
+        return labelService.updateLabel(id, request);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteTaskStatus(@PathVariable Long id) {
-        taskStatusService.deleteTaskStatus(id);
+    public void deleteLabel(@PathVariable Long id) {
+        labelService.deleteLabel(id);
     }
 } 
