@@ -3,11 +3,14 @@ package hexlet.code.app.service;
 import hexlet.code.app.dto.UserCreateRequest;
 import hexlet.code.app.dto.UserResponse;
 import hexlet.code.app.dto.UserUpdateRequest;
+import hexlet.code.app.exception.UserHasTasksException;
 import hexlet.code.app.exception.UserNotFoundException;
 import hexlet.code.app.mapper.UserMapper;
+import hexlet.code.app.repository.TaskRepository;
 import hexlet.code.app.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final TaskRepository taskRepository;
     private final UserMapper userMapper;
 
     public UserResponse getUserById(Long id) {
@@ -44,10 +48,15 @@ public class UserService {
         return userMapper.toResponse(updatedUser);
     }
 
+    @Transactional
     public void deleteUser(Long id) {
-        if (!userRepository.existsById(id)) {
-            throw new UserNotFoundException(id);
+        var user = userRepository.findById(id)
+            .orElseThrow(() -> new UserNotFoundException(id));
+
+        if (taskRepository.existsByAssignee(user)) {
+            throw new UserHasTasksException(id);
         }
-        userRepository.deleteById(id);
+
+        userRepository.delete(user);
     }
 } 

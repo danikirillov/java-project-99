@@ -3,11 +3,14 @@ package hexlet.code.app.service;
 import hexlet.code.app.dto.TaskStatusCreateRequest;
 import hexlet.code.app.dto.TaskStatusResponse;
 import hexlet.code.app.dto.TaskStatusUpdate;
+import hexlet.code.app.exception.TaskStatusHasTasksException;
 import hexlet.code.app.exception.TaskStatusNotFoundException;
 import hexlet.code.app.mapper.TaskStatusMapper;
+import hexlet.code.app.repository.TaskRepository;
 import hexlet.code.app.repository.TaskStatusRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TaskStatusService {
     private final TaskStatusRepository taskStatusRepository;
+    private final TaskRepository taskRepository;
     private final TaskStatusMapper taskStatusMapper;
 
     public List<TaskStatusResponse> getAllTaskStatuses() {
@@ -45,10 +49,15 @@ public class TaskStatusService {
         return taskStatusMapper.toDto(updatedTaskStatus);
     }
 
+    @Transactional
     public void deleteTaskStatus(Long id) {
-        if (!taskStatusRepository.existsById(id)) {
-            throw new TaskStatusNotFoundException(id);
+        var taskStatus = taskStatusRepository.findById(id)
+            .orElseThrow(() -> new TaskStatusNotFoundException(id));
+
+        if (taskRepository.existsByTaskStatus(taskStatus)) {
+            throw new TaskStatusHasTasksException(id);
         }
-        taskStatusRepository.deleteById(id);
+
+        taskStatusRepository.delete(taskStatus);
     }
 } 
