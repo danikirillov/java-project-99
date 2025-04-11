@@ -4,6 +4,8 @@ import hexlet.code.app.dto.TaskStatusCreateRequest;
 import hexlet.code.app.dto.UserCreateRequest;
 import hexlet.code.app.mapper.TaskStatusMapper;
 import hexlet.code.app.mapper.UserMapper;
+import hexlet.code.app.model.Label;
+import hexlet.code.app.repository.LabelRepository;
 import hexlet.code.app.repository.TaskStatusRepository;
 import hexlet.code.app.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +24,13 @@ public class DefaultDataInitializer implements ApplicationRunner {
     private final UserMapper userMapper;
     private final TaskStatusRepository taskStatusRepository;
     private final TaskStatusMapper taskStatusMapper;
+    private final LabelRepository labelRepository;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
         initAdminUser();
         initDefaultTaskStatuses();
+        initDefaultLabels();
     }
 
     private void initAdminUser() {
@@ -56,6 +60,19 @@ public class DefaultDataInitializer implements ApplicationRunner {
             }
         });
         log.info("default task statuses were initialized");
+    }
+
+    private void initDefaultLabels() {
+        List<String> defaultLabels = List.of("feature", "bug");
+        
+        defaultLabels.forEach(labelName -> {
+            if (labelRepository.findByName(labelName).isEmpty()) {
+                var label = new Label();
+                label.setName(labelName);
+                labelRepository.save(label);
+            }
+        });
+        log.info("default labels were initialized");
     }
 
     private TaskStatusCreateRequest createTaskStatusRequest(String name, String slug) {

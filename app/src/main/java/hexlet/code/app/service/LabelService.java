@@ -4,10 +4,13 @@ import hexlet.code.app.dto.LabelCreateRequest;
 import hexlet.code.app.dto.LabelResponse;
 import hexlet.code.app.dto.LabelUpdateRequest;
 import hexlet.code.app.exception.LabelNotFoundException;
+import hexlet.code.app.exception.LabelInUseException;
 import hexlet.code.app.mapper.LabelMapper;
 import hexlet.code.app.repository.LabelRepository;
+import hexlet.code.app.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LabelService {
     private final LabelRepository labelRepository;
+    private final TaskRepository taskRepository;
     private final LabelMapper labelMapper;
 
     public LabelResponse getLabelById(Long id) {
@@ -43,10 +47,15 @@ public class LabelService {
         return labelMapper.toResponse(updatedLabel);
     }
 
+    @Transactional
     public void deleteLabel(Long id) {
-        if (!labelRepository.existsById(id)) {
-            throw new LabelNotFoundException(id);
+        var label = labelRepository.findById(id)
+            .orElseThrow(() -> new LabelNotFoundException(id));
+
+        if (taskRepository.existsByLabelsContains(label)) {
+            throw new LabelInUseException(id);
         }
-        labelRepository.deleteById(id);
+
+        labelRepository.delete(label);
     }
 } 

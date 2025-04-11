@@ -7,6 +7,7 @@ import hexlet.code.app.exception.TaskNotFoundException;
 import hexlet.code.app.exception.TaskStatusNotFoundException;
 import hexlet.code.app.mapper.JsonNullableMapper;
 import hexlet.code.app.mapper.TaskMapper;
+import hexlet.code.app.repository.LabelRepository;
 import hexlet.code.app.repository.TaskRepository;
 import hexlet.code.app.repository.TaskStatusRepository;
 import hexlet.code.app.repository.UserRepository;
@@ -14,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +24,7 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final TaskStatusRepository taskStatusRepository;
     private final UserRepository userRepository;
+    private final LabelRepository labelRepository;
     private final TaskMapper taskMapper;
     private final JsonNullableMapper jsonNullableMapper;
 
@@ -48,6 +52,15 @@ public class TaskService {
             task.setAssignee(assignee);
         }
 
+        if (request.getTaskLabelIds() != null) {
+            var labels = request.getTaskLabelIds().stream()
+                .map(labelRepository::findById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toSet());
+            task.setLabels(labels);
+        }
+
         var savedTask = taskRepository.save(task);
         return taskMapper.toResponse(savedTask);
     }
@@ -62,6 +75,17 @@ public class TaskService {
                 .orElseThrow(() -> new TaskStatusNotFoundException(nullableStatus.get()));
             task.setTaskStatus(status);
         }
+
+        var nullableLabelIds = request.getTaskLabelIds();
+        if (jsonNullableMapper.isPresent(nullableLabelIds)) {
+            var labels = nullableLabelIds.get().stream()
+                .map(labelRepository::findById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toSet());
+            task.setLabels(labels);
+        }
+
         var updatedTask = taskRepository.save(task);
         return taskMapper.toResponse(updatedTask);
     }
