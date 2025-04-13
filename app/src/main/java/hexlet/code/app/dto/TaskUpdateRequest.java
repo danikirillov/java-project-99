@@ -12,19 +12,19 @@ import java.util.Set;
 @Getter
 @Setter
 public class TaskUpdateRequest {
-    private JsonNullable<Integer> index = JsonNullable.undefined();
+    private JsonNullable<Integer> index;
 
     @JsonProperty("assignee_id")
-    private JsonNullable<Long> assigneeId = JsonNullable.undefined();
+    private JsonNullable<Long> assigneeId;
 
     @Size(min = 1)
     @NotBlank
-    private JsonNullable<String> title = JsonNullable.undefined();
+    private JsonNullable<String> title;
 
-    private JsonNullable<String> content = JsonNullable.undefined();
+    private JsonNullable<String> content;
 
-    private JsonNullable<String> status = JsonNullable.undefined();
+    private JsonNullable<String> status;
 
     @JsonProperty("taskLabelIds")
-    private JsonNullable<Set<Long>> taskLabelIds = JsonNullable.undefined();
+    private JsonNullable<Set<Long>> taskLabelIds;
 } 

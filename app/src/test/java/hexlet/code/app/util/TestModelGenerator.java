@@ -46,13 +46,13 @@ public class TestModelGenerator {
         taskModel = Instancio.of(Task.class)
             .ignore(Select.field(Task::getId))
             .ignore(Select.field(Task::getCreatedAt))
-            .supply(Select.field(Task::getName), () -> "Test Task")
-            .supply(Select.field(Task::getDescription), () -> "Test Description")
+            .supply(Select.field(Task::getName), () -> faker.lorem().characters(5))
+            .supply(Select.field(Task::getDescription), () -> faker.lorem().paragraph())
             .toModel();
 
         labelModel = Instancio.of(Label.class)
             .ignore(Select.field(Label::getId))
-            .supply(Select.field(Label::getName), () -> faker.lorem().word())
+            .supply(Select.field(Label::getName), () -> faker.lorem().word() + "_" + faker.number().randomNumber())
             .ignore(Select.field(Label::getCreatedAt))
             .toModel();
     }

@@ -27,6 +27,7 @@ import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequ
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -116,6 +117,7 @@ class TaskControllerTest {
     }
 
     @Test
+    @Transactional
     void testIndex() throws Exception {
         var response = mockMvc.perform(get("/api/tasks").with(jwt()))
             .andExpect(status().isOk())
@@ -145,6 +147,7 @@ class TaskControllerTest {
     }
 
     @Test
+    @Transactional
     void testCreate() throws Exception {
         var task = Instancio.of(modelGenerator.getTaskModel())
             .set(field(Task::getTaskStatus), testStatus)
@@ -154,7 +157,7 @@ class TaskControllerTest {
         var request = new TaskCreateRequest();
         request.setTitle(task.getName());
         request.setContent(task.getDescription());
-        request.setStatus(testStatus.getName());
+        request.setStatus(testStatus.getSlug());
         request.setAssigneeId(testUser.getId());
         request.setTaskLabelIds(Set.of(testLabel1.getId(), testLabel2.getId()));
 
@@ -181,6 +184,7 @@ class TaskControllerTest {
     }
 
     @Test
+    @Transactional
     void testUpdate() throws Exception {
         var data = new TaskUpdateRequest();
         data.setTitle(JsonNullable.of("New Title"));

@@ -3,8 +3,8 @@ package hexlet.code.app.mapper;
 import hexlet.code.app.dto.TaskCreateRequest;
 import hexlet.code.app.dto.TaskResponse;
 import hexlet.code.app.dto.TaskUpdateRequest;
-import hexlet.code.app.model.Task;
 import hexlet.code.app.model.Label;
+import hexlet.code.app.model.Task;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
@@ -12,7 +12,6 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
-import org.openapitools.jackson.nullable.JsonNullable;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -40,7 +39,6 @@ public abstract class TaskMapper {
     @Mapping(target = "description", source = "content")
     @Mapping(target = "index", source = "index")
     @Mapping(target = "assignee.id", source = "assigneeId")
-    @Mapping(target = "labels", source = "taskLabelIds", qualifiedByName = "mapNullableIdsToLabels")
     public abstract void updateEntity(@MappingTarget Task entity, TaskUpdateRequest dto);
 
     @Named("mapLabelsToIds")
@@ -65,13 +63,5 @@ public abstract class TaskMapper {
                 return label;
             })
             .collect(Collectors.toSet());
-    }
-
-    @Named("mapNullableIdsToLabels")
-    protected Set<Label> mapNullableIdsToLabels(JsonNullable<Set<Long>> labelIds) {
-        if (labelIds == null || !labelIds.isPresent()) {
-            return null;
-        }
-        return mapIdsToLabels(labelIds.get());
     }
 } 
