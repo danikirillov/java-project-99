@@ -9,6 +9,7 @@ instancio-junit = "3.6.0"
 json-unit-assertj = "3.2.2"
 datafaker = "2.0.2"
 junit = "5.10.1"
+springdoc-openapi = "2.3.0"
 
 [libraries]
 spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
@@ -30,6 +31,8 @@ json-unit-assertj = { module = "net.javacrumbs.json-unit:json-unit-assertj", ver
 datafaker = { module = "net.datafaker:datafaker", version.ref = "datafaker" }
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
+
+springdoc-openapi-ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc-openapi" }
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }

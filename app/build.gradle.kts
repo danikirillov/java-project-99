@@ -42,6 +42,9 @@ dependencies {
 	implementation(libs.spring.boot.starter.jdbc)
 	implementation(libs.jackson.databind.nullable)
 
+	// OpenAPI (Swagger)
+	implementation(libs.springdoc.openapi.ui)
+
 	// MapStruct
 	implementation(libs.mapstruct)
 	annotationProcessor(libs.mapstruct.processor)
