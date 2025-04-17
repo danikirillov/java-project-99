@@ -26,7 +26,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(onlyExplicitlyIncluded = true)
-public class Label {
+public class Label implements BaseEntity {
     @Id
     @EqualsAndHashCode.Include
     @ToString.Include

@@ -1,6 +1,8 @@
 package hexlet.code.app.exception;
 
-public class UserNotFoundException extends RuntimeException {
+import jakarta.persistence.EntityNotFoundException;
+
+public class UserNotFoundException extends EntityNotFoundException {
     public UserNotFoundException(Long id) {
         super("User with id " + id + " not found");
     }

@@ -1,7 +1,7 @@
 package hexlet.code.app.config;
 
-import hexlet.code.app.dto.TaskStatusCreateRequest;
-import hexlet.code.app.dto.UserCreateRequest;
+import hexlet.code.app.dto.status.TaskStatusCreateRequest;
+import hexlet.code.app.dto.user.UserCreateRequest;
 import hexlet.code.app.mapper.TaskStatusMapper;
 import hexlet.code.app.mapper.UserMapper;
 import hexlet.code.app.model.Label;

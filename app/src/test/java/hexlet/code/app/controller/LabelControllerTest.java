@@ -2,9 +2,9 @@ package hexlet.code.app.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hexlet.code.app.dto.LabelCreateRequest;
-import hexlet.code.app.dto.LabelResponse;
-import hexlet.code.app.dto.LabelUpdateRequest;
+import hexlet.code.app.dto.label.LabelCreateRequest;
+import hexlet.code.app.dto.label.LabelResponse;
+import hexlet.code.app.dto.label.LabelUpdateRequest;
 import hexlet.code.app.mapper.LabelMapper;
 import hexlet.code.app.model.Label;
 import hexlet.code.app.repository.LabelRepository;

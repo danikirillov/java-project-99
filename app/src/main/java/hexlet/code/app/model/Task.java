@@ -32,7 +32,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(onlyExplicitlyIncluded = true)
-public class Task {
+public class Task implements BaseEntity {
     @Id
     @EqualsAndHashCode.Include
     @ToString.Include

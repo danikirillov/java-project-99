@@ -29,7 +29,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(onlyExplicitlyIncluded = true)
-public class User implements UserDetails {
+public class User implements UserDetails, BaseEntity {
     @Id
     @EqualsAndHashCode.Include
     @ToString.Include

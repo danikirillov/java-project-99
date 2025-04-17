@@ -2,9 +2,9 @@ package hexlet.code.app.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hexlet.code.app.dto.TaskCreateRequest;
-import hexlet.code.app.dto.TaskResponse;
-import hexlet.code.app.dto.TaskUpdateRequest;
+import hexlet.code.app.dto.task.TaskCreateRequest;
+import hexlet.code.app.dto.task.TaskResponse;
+import hexlet.code.app.dto.task.TaskUpdateRequest;
 import hexlet.code.app.mapper.TaskMapper;
 import hexlet.code.app.model.Task;
 import hexlet.code.app.model.TaskStatus;
@@ -30,6 +30,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -141,7 +142,7 @@ class TaskControllerTest {
         // Verify the test task properties
         assertThat(testTaskResponse.getTitle()).isEqualTo(testTask.getName());
         assertThat(testTaskResponse.getContent()).isEqualTo(testTask.getDescription());
-        assertThat(testTaskResponse.getStatus()).isEqualTo(testTask.getTaskStatus().getName());
+        assertThat(testTaskResponse.getStatus()).isEqualTo(testTask.getTaskStatus().getSlug());
         assertThat(testTaskResponse.getAssigneeId()).isEqualTo(testTask.getAssignee().getId());
         assertThat(testTaskResponse.getTaskLabelIds()).contains(testLabel1.getId());
     }
@@ -189,7 +190,9 @@ class TaskControllerTest {
         var data = new TaskUpdateRequest();
         data.setTitle(JsonNullable.of("New Title"));
         data.setContent(JsonNullable.of("New Content"));
-        data.setTaskLabelIds(JsonNullable.of(Set.of(testLabel2.getId())));
+        var labelIds = new HashSet<Long>();
+        labelIds.add(testLabel2.getId());
+        data.setTaskLabelIds(JsonNullable.of(labelIds));
 
         var request = put("/api/tasks/" + testTask.getId())
             .with(token)

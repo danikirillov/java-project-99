@@ -27,7 +27,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(onlyExplicitlyIncluded = true)
-public class TaskStatus {
+public class TaskStatus implements BaseEntity {
     @Id
     @EqualsAndHashCode.Include
     @ToString.Include

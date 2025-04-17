@@ -1,8 +1,8 @@
 package hexlet.code.app.controller;
 
-import hexlet.code.app.dto.TaskCreateRequest;
-import hexlet.code.app.dto.TaskResponse;
-import hexlet.code.app.dto.TaskUpdateRequest;
+import hexlet.code.app.dto.task.TaskCreateRequest;
+import hexlet.code.app.dto.task.TaskResponse;
+import hexlet.code.app.dto.task.TaskUpdateRequest;
 import hexlet.code.app.service.TaskService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,15 +28,16 @@ public class TaskController {
     private final TaskService taskService;
 
     @GetMapping
-    public ResponseEntity<List<TaskResponse>> getAllTasks(
-        @RequestParam(defaultValue = "1") Integer page,
-        @RequestParam(defaultValue = "10") Integer limit) {
-        var tasks = taskService.getAllTasks();
-        var skip = (page - 1) * limit;
-        var tasksFiltered = tasks.stream().skip(skip).limit(limit).toList();
+    public ResponseEntity<List<TaskResponse>> getTasks(
+        @RequestParam(required = false) String titleCont,
+        @RequestParam(required = false) Long assigneeId,
+        @RequestParam(required = false) String status,
+        @RequestParam(required = false) Long labelId
+    ) {
+        var tasks = taskService.getFilteredTasks(titleCont, assigneeId, status, labelId);
         return ResponseEntity.ok()
             .header("X-Total-Count", String.valueOf(tasks.size()))
-            .body(tasksFiltered);
+            .body(tasks);
     }
 
     @GetMapping("/{id}")

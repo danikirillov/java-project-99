@@ -1,4 +1,4 @@
-package hexlet.code.app.util;
+package hexlet.code.app.config.security;
 
 import lombok.Getter;
 import lombok.Setter;

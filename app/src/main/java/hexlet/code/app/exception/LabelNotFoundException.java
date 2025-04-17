@@ -1,6 +1,8 @@
 package hexlet.code.app.exception;
 
-public class LabelNotFoundException extends RuntimeException {
+import jakarta.persistence.EntityNotFoundException;
+
+public class LabelNotFoundException extends EntityNotFoundException {
     public LabelNotFoundException(Long id) {
         super("Label with id " + id + " not found");
     }

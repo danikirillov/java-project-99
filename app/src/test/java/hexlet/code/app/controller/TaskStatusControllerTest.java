@@ -2,8 +2,8 @@ package hexlet.code.app.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hexlet.code.app.dto.TaskStatusResponse;
-import hexlet.code.app.dto.TaskStatusUpdate;
+import hexlet.code.app.dto.status.TaskStatusResponse;
+import hexlet.code.app.dto.status.TaskStatusUpdate;
 import hexlet.code.app.mapper.TaskStatusMapper;
 import hexlet.code.app.model.TaskStatus;
 import hexlet.code.app.repository.TaskStatusRepository;
@@ -103,7 +103,7 @@ class TaskStatusControllerTest {
         mockMvc.perform(request)
             .andExpect(status().isCreated());
 
-        var status = taskStatusRepository.findByName(data.getName()).orElse(null);
+        var status = taskStatusRepository.findBySlug(data.getSlug()).orElse(null);
 
         assertNotNull(status);
         assertThat(status.getName()).isEqualTo(data.getName());

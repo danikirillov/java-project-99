@@ -2,8 +2,8 @@ package hexlet.code.app.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hexlet.code.app.dto.UserResponse;
-import hexlet.code.app.dto.UserUpdateRequest;
+import hexlet.code.app.dto.user.UserResponse;
+import hexlet.code.app.dto.user.UserUpdateRequest;
 import hexlet.code.app.mapper.UserMapper;
 import hexlet.code.app.model.User;
 import hexlet.code.app.repository.UserRepository;

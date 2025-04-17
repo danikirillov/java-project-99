@@ -1,8 +1,8 @@
 package hexlet.code.app.service;
 
-import hexlet.code.app.dto.LabelCreateRequest;
-import hexlet.code.app.dto.LabelResponse;
-import hexlet.code.app.dto.LabelUpdateRequest;
+import hexlet.code.app.dto.label.LabelCreateRequest;
+import hexlet.code.app.dto.label.LabelResponse;
+import hexlet.code.app.dto.label.LabelUpdateRequest;
 import hexlet.code.app.exception.LabelNotFoundException;
 import hexlet.code.app.exception.LabelInUseException;
 import hexlet.code.app.mapper.LabelMapper;

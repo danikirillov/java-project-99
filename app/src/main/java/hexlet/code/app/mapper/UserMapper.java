@@ -1,8 +1,8 @@
 package hexlet.code.app.mapper;
 
-import hexlet.code.app.dto.UserCreateRequest;
-import hexlet.code.app.dto.UserResponse;
-import hexlet.code.app.dto.UserUpdateRequest;
+import hexlet.code.app.dto.user.UserCreateRequest;
+import hexlet.code.app.dto.user.UserResponse;
+import hexlet.code.app.dto.user.UserUpdateRequest;
 import hexlet.code.app.model.User;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
@@ -10,6 +10,7 @@ import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
+import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -22,6 +23,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public abstract class UserMapper {
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private JsonNullableMapper jsonNullableMapper;
 
     public abstract User toEntity(UserCreateRequest dto);
 
@@ -35,5 +38,14 @@ public abstract class UserMapper {
     public void encryptPassword(UserCreateRequest request) {
         var password = request.getPassword();
         request.setPassword(passwordEncoder.encode(password));
+    }
+
+    @BeforeMapping
+    public void encryptPassword(UserUpdateRequest request) {
+        var password = request.getPassword();
+        if (jsonNullableMapper.isPresent(password)) {
+            var encodedPassword = JsonNullable.of(passwordEncoder.encode(password.get()));
+            request.setPassword(encodedPassword);
+        }
     }
 } 

@@ -1,4 +1,4 @@
-package hexlet.code.app.config;
+package hexlet.code.app.config.security;
 
 import hexlet.code.app.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;

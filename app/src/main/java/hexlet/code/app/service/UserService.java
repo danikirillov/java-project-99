@@ -1,8 +1,8 @@
 package hexlet.code.app.service;
 
-import hexlet.code.app.dto.UserCreateRequest;
-import hexlet.code.app.dto.UserResponse;
-import hexlet.code.app.dto.UserUpdateRequest;
+import hexlet.code.app.dto.user.UserCreateRequest;
+import hexlet.code.app.dto.user.UserResponse;
+import hexlet.code.app.dto.user.UserUpdateRequest;
 import hexlet.code.app.exception.UserHasTasksException;
 import hexlet.code.app.exception.UserNotFoundException;
 import hexlet.code.app.mapper.UserMapper;
