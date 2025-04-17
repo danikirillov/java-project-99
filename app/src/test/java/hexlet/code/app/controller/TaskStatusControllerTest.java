@@ -10,6 +10,7 @@ import hexlet.code.app.repository.TaskStatusRepository;
 import hexlet.code.app.util.TestModelGenerator;
 import org.assertj.core.api.Assertions;
 import org.instancio.Instancio;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openapitools.jackson.nullable.JsonNullable;
@@ -63,8 +64,6 @@ class TaskStatusControllerTest {
 
     @BeforeEach
     void setUp() {
-        taskStatusRepository.deleteAll();
-
         mockMvc = MockMvcBuilders.webAppContextSetup(wac)
             .defaultResponseCharacterEncoding(StandardCharsets.UTF_8)
             .apply(springSecurity())
@@ -73,6 +72,11 @@ class TaskStatusControllerTest {
         testStatus = Instancio.of(modelGenerator.getTaskStatusModel()).create();
         taskStatusRepository.save(testStatus);
         token = jwt().jwt(builder -> builder.subject("admin@ad.min"));
+    }
+
+    @AfterEach
+    void clean() {
+        taskStatusRepository.deleteAll();
     }
 
     @Test

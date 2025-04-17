@@ -10,6 +10,7 @@ import hexlet.code.app.repository.UserRepository;
 import hexlet.code.app.util.TestModelGenerator;
 import org.assertj.core.api.Assertions;
 import org.instancio.Instancio;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openapitools.jackson.nullable.JsonNullable;
@@ -63,8 +64,6 @@ class UserControllerTest {
 
     @BeforeEach
     void setUp() {
-        userRepository.deleteAll();
-
         mockMvc = MockMvcBuilders.webAppContextSetup(wac)
             .defaultResponseCharacterEncoding(StandardCharsets.UTF_8)
             .apply(springSecurity())
@@ -73,6 +72,11 @@ class UserControllerTest {
         testUser = Instancio.of(modelGenerator.getUserModel()).create();
         userRepository.save(testUser);
         token = jwt().jwt(builder -> builder.subject(testUser.getEmail()));
+    }
+
+    @AfterEach
+    void clean() {
+        userRepository.deleteAll();
     }
 
     @Test

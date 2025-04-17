@@ -48,6 +48,7 @@ public class TestModelGenerator {
             .ignore(Select.field(Task::getCreatedAt))
             .supply(Select.field(Task::getName), () -> faker.lorem().characters(5))
             .supply(Select.field(Task::getDescription), () -> faker.lorem().paragraph())
+            .supply(Select.field(Task::getIndex), () -> faker.number().numberBetween(1, 1000))
             .toModel();
 
         labelModel = Instancio.of(Label.class)

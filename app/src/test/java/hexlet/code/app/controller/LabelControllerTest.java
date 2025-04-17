@@ -10,6 +10,7 @@ import hexlet.code.app.model.Label;
 import hexlet.code.app.repository.LabelRepository;
 import hexlet.code.app.util.TestModelGenerator;
 import org.instancio.Instancio;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openapitools.jackson.nullable.JsonNullable;
@@ -62,8 +63,6 @@ class LabelControllerTest {
 
     @BeforeEach
     void setUp() {
-        labelRepository.deleteAll();
-
         mockMvc = MockMvcBuilders.webAppContextSetup(wac)
             .defaultResponseCharacterEncoding(StandardCharsets.UTF_8)
             .apply(springSecurity())
@@ -73,6 +72,11 @@ class LabelControllerTest {
         labelRepository.save(testLabel);
 
         token = jwt().jwt(builder -> builder.subject("admin@ad.min"));
+    }
+
+    @AfterEach
+    void clean() {
+        labelRepository.deleteAll();
     }
 
     @Test

@@ -16,6 +16,7 @@ import hexlet.code.app.repository.UserRepository;
 import hexlet.code.app.repository.LabelRepository;
 import hexlet.code.app.util.TestModelGenerator;
 import org.instancio.Instancio;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openapitools.jackson.nullable.JsonNullable;
@@ -79,47 +80,72 @@ class TaskControllerTest {
 
     private JwtRequestPostProcessor token;
     private Task testTask;
+    private Task testTask2;
     private TaskStatus testStatus;
+    private TaskStatus testStatus2;
     private User testUser;
+    private User testUser2;
     private Label testLabel1;
     private Label testLabel2;
 
     @BeforeEach
     void setUp() {
-        taskRepository.deleteAll();
-        taskStatusRepository.deleteAll();
-        userRepository.deleteAll();
-        labelRepository.deleteAll();
-
         mockMvc = MockMvcBuilders.webAppContextSetup(wac)
             .defaultResponseCharacterEncoding(StandardCharsets.UTF_8)
             .apply(springSecurity())
             .build();
 
+        // Create test users
         testUser = Instancio.of(modelGenerator.getUserModel()).create();
+        testUser2 = Instancio.of(modelGenerator.getUserModel()).create();
         userRepository.save(testUser);
+        userRepository.save(testUser2);
 
+        // Create test statuses
         testStatus = Instancio.of(modelGenerator.getTaskStatusModel()).create();
+        testStatus2 = Instancio.of(modelGenerator.getTaskStatusModel()).create();
         taskStatusRepository.save(testStatus);
+        taskStatusRepository.save(testStatus2);
 
+        // Create test labels
         testLabel1 = Instancio.of(modelGenerator.getLabelModel()).create();
         testLabel2 = Instancio.of(modelGenerator.getLabelModel()).create();
         labelRepository.save(testLabel1);
         labelRepository.save(testLabel2);
 
+        // Create first test task
         testTask = Instancio.of(modelGenerator.getTaskModel())
             .set(field(Task::getTaskStatus), testStatus)
             .set(field(Task::getAssignee), testUser)
             .set(field(Task::getLabels), Set.of(testLabel1))
+            .set(field(Task::getName), "First test task")
             .create();
         taskRepository.save(testTask);
 
+        // Create second test task with different properties
+        testTask2 = Instancio.of(modelGenerator.getTaskModel())
+            .set(field(Task::getTaskStatus), testStatus2)
+            .set(field(Task::getAssignee), testUser2)
+            .set(field(Task::getLabels), Set.of(testLabel2))
+            .set(field(Task::getName), "Second test task")
+            .create();
+        taskRepository.save(testTask2);
+
         token = jwt().jwt(builder -> builder.subject(testUser.getEmail()));
+    }
+
+    @AfterEach
+    void clean() {
+        taskRepository.deleteAll();
+        taskStatusRepository.deleteAll();
+        userRepository.deleteAll();
+        labelRepository.deleteAll();
     }
 
     @Test
     @Transactional
     void testIndex() throws Exception {
+        // Test without filters
         var response = mockMvc.perform(get("/api/tasks").with(jwt()))
             .andExpect(status().isOk())
             .andReturn()
@@ -132,19 +158,78 @@ class TaskControllerTest {
             .toList();
 
         assertThat(actual).hasSize(expected.size());
+        assertThat(actual).hasSize(2); // We expect both test tasks
         
-        // Find the test task in the response
-        var testTaskResponse = actual.stream()
-            .filter(task -> task.getId().equals(testTask.getId()))
-            .findFirst()
-            .orElseThrow();
-
-        // Verify the test task properties
-        assertThat(testTaskResponse.getTitle()).isEqualTo(testTask.getName());
-        assertThat(testTaskResponse.getContent()).isEqualTo(testTask.getDescription());
-        assertThat(testTaskResponse.getStatus()).isEqualTo(testTask.getTaskStatus().getSlug());
-        assertThat(testTaskResponse.getAssigneeId()).isEqualTo(testTask.getAssignee().getId());
-        assertThat(testTaskResponse.getTaskLabelIds()).contains(testLabel1.getId());
+        // Test filter by title
+        response = mockMvc.perform(get("/api/tasks")
+                .param("titleCont", "First")
+                .with(jwt()))
+            .andExpect(status().isOk())
+            .andReturn()
+            .getResponse();
+        body = response.getContentAsString();
+        actual = om.readValue(body, new TypeReference<>() {});
+        
+        assertThat(actual).hasSize(1);
+        assertThat(actual.getFirst().getId()).isEqualTo(testTask.getId());
+        assertThat(actual.getFirst().getTitle()).contains("First");
+        
+        // Test filter by assignee
+        response = mockMvc.perform(get("/api/tasks")
+                .param("assigneeId", testUser.getId().toString())
+                .with(jwt()))
+            .andExpect(status().isOk())
+            .andReturn()
+            .getResponse();
+        body = response.getContentAsString();
+        actual = om.readValue(body, new TypeReference<>() {});
+        
+        assertThat(actual).hasSize(1);
+        assertThat(actual.getFirst().getId()).isEqualTo(testTask.getId());
+        assertThat(actual.getFirst().getAssigneeId()).isEqualTo(testUser.getId());
+        
+        // Test filter by status
+        response = mockMvc.perform(get("/api/tasks")
+                .param("status", testStatus.getSlug())
+                .with(jwt()))
+            .andExpect(status().isOk())
+            .andReturn()
+            .getResponse();
+        body = response.getContentAsString();
+        actual = om.readValue(body, new TypeReference<>() {});
+        
+        assertThat(actual).hasSize(1);
+        assertThat(actual.getFirst().getId()).isEqualTo(testTask.getId());
+        assertThat(actual.getFirst().getStatus()).isEqualTo(testStatus.getSlug());
+        
+        // Test filter by label
+        response = mockMvc.perform(get("/api/tasks")
+                .param("labelId", testLabel1.getId().toString())
+                .with(jwt()))
+            .andExpect(status().isOk())
+            .andReturn()
+            .getResponse();
+        body = response.getContentAsString();
+        actual = om.readValue(body, new TypeReference<>() {});
+        
+        assertThat(actual).hasSize(1);
+        assertThat(actual.getFirst().getId()).isEqualTo(testTask.getId());
+        assertThat(actual.getFirst().getTaskLabelIds()).contains(testLabel1.getId());
+        
+        // Test multiple filters
+        response = mockMvc.perform(get("/api/tasks")
+                .param("titleCont", "test")
+                .param("assigneeId", testUser2.getId().toString())
+                .with(jwt()))
+            .andExpect(status().isOk())
+            .andReturn()
+            .getResponse();
+        body = response.getContentAsString();
+        actual = om.readValue(body, new TypeReference<>() {});
+        
+        assertThat(actual).hasSize(1);
+        assertThat(actual.getFirst().getId()).isEqualTo(testTask2.getId());
+        assertThat(actual.getFirst().getAssigneeId()).isEqualTo(testUser2.getId());
     }
 
     @Test
