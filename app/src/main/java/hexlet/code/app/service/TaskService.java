@@ -1,6 +1,7 @@
 package hexlet.code.app.service;
 
 import hexlet.code.app.dto.task.TaskCreateRequest;
+import hexlet.code.app.dto.task.TaskFilterProperties;
 import hexlet.code.app.dto.task.TaskResponse;
 import hexlet.code.app.dto.task.TaskUpdateRequest;
 import hexlet.code.app.exception.TaskNotFoundException;
@@ -26,18 +27,12 @@ public class TaskService {
         return taskMapper.toResponse(task);
     }
 
-    public List<TaskResponse> getAllTasks() {
-        return taskRepository.findAll().stream()
-            .map(taskMapper::toResponse)
-            .toList();
-    }
-
-    public List<TaskResponse> getFilteredTasks(String titleCont, Long assigneeId, String status, Long labelId) {
-        Specification<Task> spec = Specification.<Task>where(null)
-            .and(TaskSpecification.withTitleContaining(titleCont))
-            .and(TaskSpecification.withAssigneeId(assigneeId))
-            .and(TaskSpecification.withStatus(status))
-            .and(TaskSpecification.withLabelId(labelId));
+    public List<TaskResponse> getFilteredTasks(TaskFilterProperties taskFilterProperties) {
+        var spec = Specification.<Task>where(null)
+            .and(TaskSpecification.withTitleContaining(taskFilterProperties.getTitleCont()))
+            .and(TaskSpecification.withAssigneeId(taskFilterProperties.getAssigneeId()))
+            .and(TaskSpecification.withStatus(taskFilterProperties.getStatus()))
+            .and(TaskSpecification.withLabelId(taskFilterProperties.getLabelId()));
 
         return taskRepository.findAll(spec).stream()
             .map(taskMapper::toResponse)

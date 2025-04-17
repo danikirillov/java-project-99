@@ -1,6 +1,7 @@
 package hexlet.code.app.controller;
 
 import hexlet.code.app.dto.task.TaskCreateRequest;
+import hexlet.code.app.dto.task.TaskFilterProperties;
 import hexlet.code.app.dto.task.TaskResponse;
 import hexlet.code.app.dto.task.TaskUpdateRequest;
 import hexlet.code.app.service.TaskService;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,13 +28,8 @@ public class TaskController {
     private final TaskService taskService;
 
     @GetMapping
-    public ResponseEntity<List<TaskResponse>> getTasks(
-        @RequestParam(required = false) String titleCont,
-        @RequestParam(required = false) Long assigneeId,
-        @RequestParam(required = false) String status,
-        @RequestParam(required = false) Long labelId
-    ) {
-        var tasks = taskService.getFilteredTasks(titleCont, assigneeId, status, labelId);
+    public ResponseEntity<List<TaskResponse>> getTasks(TaskFilterProperties taskFilterProperties) {
+        var tasks = taskService.getFilteredTasks(taskFilterProperties);
         return ResponseEntity.ok()
             .header("X-Total-Count", String.valueOf(tasks.size()))
             .body(tasks);

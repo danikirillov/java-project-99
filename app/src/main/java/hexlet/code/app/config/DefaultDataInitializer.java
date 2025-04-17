@@ -64,7 +64,7 @@ public class DefaultDataInitializer implements ApplicationRunner {
 
     private void initDefaultLabels() {
         List<String> defaultLabels = List.of("feature", "bug");
-        
+
         defaultLabels.forEach(labelName -> {
             if (labelRepository.findByName(labelName).isEmpty()) {
                 var label = new Label();

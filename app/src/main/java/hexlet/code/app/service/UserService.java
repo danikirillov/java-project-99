@@ -3,7 +3,7 @@ package hexlet.code.app.service;
 import hexlet.code.app.dto.user.UserCreateRequest;
 import hexlet.code.app.dto.user.UserResponse;
 import hexlet.code.app.dto.user.UserUpdateRequest;
-import hexlet.code.app.exception.UserHasTasksException;
+import hexlet.code.app.exception.HasTasksException;
 import hexlet.code.app.exception.UserNotFoundException;
 import hexlet.code.app.mapper.UserMapper;
 import hexlet.code.app.repository.TaskRepository;
@@ -54,7 +54,7 @@ public class UserService {
             .orElseThrow(() -> new UserNotFoundException(id));
 
         if (taskRepository.existsByAssignee(user)) {
-            throw new UserHasTasksException(id);
+            throw new HasTasksException(id);
         }
 
         userRepository.delete(user);

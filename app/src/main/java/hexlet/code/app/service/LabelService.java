@@ -3,8 +3,8 @@ package hexlet.code.app.service;
 import hexlet.code.app.dto.label.LabelCreateRequest;
 import hexlet.code.app.dto.label.LabelResponse;
 import hexlet.code.app.dto.label.LabelUpdateRequest;
+import hexlet.code.app.exception.HasTasksException;
 import hexlet.code.app.exception.LabelNotFoundException;
-import hexlet.code.app.exception.LabelInUseException;
 import hexlet.code.app.mapper.LabelMapper;
 import hexlet.code.app.repository.LabelRepository;
 import hexlet.code.app.repository.TaskRepository;
@@ -53,7 +53,7 @@ public class LabelService {
             .orElseThrow(() -> new LabelNotFoundException(id));
 
         if (taskRepository.existsByLabelsContains(label)) {
-            throw new LabelInUseException(id);
+            throw new HasTasksException(id);
         }
 
         labelRepository.delete(label);

@@ -3,7 +3,7 @@ package hexlet.code.app.service;
 import hexlet.code.app.dto.status.TaskStatusCreateRequest;
 import hexlet.code.app.dto.status.TaskStatusResponse;
 import hexlet.code.app.dto.status.TaskStatusUpdate;
-import hexlet.code.app.exception.TaskStatusHasTasksException;
+import hexlet.code.app.exception.HasTasksException;
 import hexlet.code.app.exception.TaskStatusNotFoundException;
 import hexlet.code.app.mapper.TaskStatusMapper;
 import hexlet.code.app.repository.TaskRepository;
@@ -55,7 +55,7 @@ public class TaskStatusService {
             .orElseThrow(() -> new TaskStatusNotFoundException(id));
 
         if (taskRepository.existsByTaskStatus(taskStatus)) {
-            throw new TaskStatusHasTasksException(id);
+            throw new HasTasksException(id);
         }
 
         taskStatusRepository.delete(taskStatus);
