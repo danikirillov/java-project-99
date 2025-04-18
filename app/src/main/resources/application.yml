@@ -21,8 +21,3 @@ logging:
     root: INFO
     org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
     org.springframework.web: DEBUG
-sentry:
-  dsn: https://27e7a3c6a8cdefe5b749c0cef0e1fbc8@o4509176841437185.ingest.de.sentry.io/4509176848449616
-  # Add data like request headers and IP for users,
-  # see https://docs.sentry.io/platforms/java/guides/spring-boot/data-management/data-collected/ for more info
-  send-default-pii: true
