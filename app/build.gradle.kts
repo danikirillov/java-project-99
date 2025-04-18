@@ -63,21 +63,7 @@ dependencies {
 	testImplementation(libs.junit.jupiter)
 }
 
-tasks.jacocoTestReport { 
-    reports { 
-        xml.required.set(true) 
-    }
-    
-    afterEvaluate {
-        classDirectories.setFrom(
-            files(classDirectories.files.map {
-                fileTree(it) {
-                    exclude("**/dto/**", "**/exception/**")
-                }
-            })
-        )
-    }
-}
+tasks.jacocoTestReport { reports { xml.required.set(true) } }
 
 tasks.withType<Test> {
 	useJUnitPlatform()
