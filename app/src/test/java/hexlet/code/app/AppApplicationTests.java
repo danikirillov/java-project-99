@@ -8,6 +8,7 @@ class AppApplicationTests {
 
 	@Test
 	void contextLoads() {
+		// no implementation required for the context load test
 	}
 
 }

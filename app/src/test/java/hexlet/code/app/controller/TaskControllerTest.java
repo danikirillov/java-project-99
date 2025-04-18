@@ -158,8 +158,7 @@ class TaskControllerTest {
             .toList();
 
         assertThat(actual).hasSize(expected.size());
-        assertThat(actual).hasSize(2); // We expect both test tasks
-        
+
         // Test filter by title
         response = mockMvc.perform(get("/api/tasks")
                 .param("titleCont", "First")
