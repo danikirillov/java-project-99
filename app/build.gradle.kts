@@ -8,20 +8,7 @@ plugins {
 	alias(libs.plugins.spring.dependency.management)
 	alias(libs.plugins.sonarqube)
 	alias(libs.plugins.lombok)
-}
-
-// Apply Sentry plugin only in production
-if (System.getenv("ENVIRONMENT") == "prod") {
-    apply(plugin = "io.sentry.jvm.gradle") {
-        version = libs.versions.sentry.get()
-    }
-
-	sentry {
-		includeSourceContext = true
-		org = "dddddd-7d"
-		projectName = "java-spring-boot"
-		authToken = System.getenv("SENTRY_AUTH_TOKEN")
-	}
+	alias(libs.plugins.sentry.jvm)
 }
 
 sonar {
@@ -51,6 +38,17 @@ buildscript {
 	repositories {
 		mavenCentral()
 	}
+}
+
+sentry {
+	// Generates a JVM (Java, Kotlin, etc.) source bundle and uploads your source code to Sentry.
+	// This enables source context, allowing you to see your source
+	// code as part of your stack traces in Sentry.
+	includeSourceContext = true
+
+	org = "dddddd-7d"
+	projectName = "java-spring-boot"
+	authToken = System.getenv("SENTRY_AUTH_TOKEN")
 }
 
 dependencies {
