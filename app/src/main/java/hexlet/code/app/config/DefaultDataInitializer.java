@@ -8,6 +8,7 @@ import hexlet.code.app.model.Label;
 import hexlet.code.app.repository.LabelRepository;
 import hexlet.code.app.repository.TaskStatusRepository;
 import hexlet.code.app.repository.UserRepository;
+import io.sentry.Sentry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
@@ -28,9 +29,14 @@ public class DefaultDataInitializer implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        initAdminUser();
-        initDefaultTaskStatuses();
-        initDefaultLabels();
+        try {
+            initAdminUser();
+            initDefaultTaskStatuses();
+            initDefaultLabels();
+        } catch (Exception ex) {
+            Sentry.captureException(ex);
+            log.error("init data error", ex);
+        }
     }
 
     private void initAdminUser() {
