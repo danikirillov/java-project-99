@@ -51,14 +51,14 @@ public class UserController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("#id == authentication.principal.id")
+    @PreAuthorize("@userRepository.findById(#id).get().getEmail() == authentication.name")
     public UserResponse updateUser(@PathVariable Long id, @Valid @RequestBody UserUpdateRequest request) {
         return userService.updateUser(id, request);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PreAuthorize("#id == authentication.principal.id")
+    @PreAuthorize("@userRepository.findById(#id).get().getEmail() == authentication.name")
     public void deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
     }
