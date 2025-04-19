@@ -82,10 +82,6 @@ dependencies {
 
 tasks.jacocoTestReport { reports { xml.required.set(true) } }
 
-tasks.withType<Test> {
-	useJUnitPlatform()
-}
-
 tasks.test {
 	useJUnitPlatform()
 	testLogging {
