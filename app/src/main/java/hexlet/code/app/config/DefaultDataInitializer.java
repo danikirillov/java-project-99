@@ -37,8 +37,8 @@ public class DefaultDataInitializer implements ApplicationRunner {
         var userData = new UserCreateRequest();
         userData.setFirstName("Admin");
         userData.setLastName("Adminov");
-        userData.setEmail("admin@ad.min");
-        userData.setPassword("hello");
+        userData.setEmail("hexlet@example.com");
+        userData.setPassword("qwerty");
         var user = userMapper.toEntity(userData);
         userRepository.save(user);
         log.info("admin user was created");
