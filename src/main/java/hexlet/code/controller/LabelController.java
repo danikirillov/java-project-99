@@ -28,15 +28,11 @@ public class LabelController {
     private final LabelService labelService;
 
     @GetMapping
-    public ResponseEntity<List<LabelResponse>> getAllLabels(
-        @RequestParam(defaultValue = "1") Integer page,
-        @RequestParam(defaultValue = "10") Integer limit) {
+    public ResponseEntity<List<LabelResponse>> getAllLabels() {
         var labels = labelService.getAllLabels();
-        var skip = (page - 1) * limit;
-        var labelsFiltered = labels.stream().skip(skip).limit(limit).toList();
         return ResponseEntity.ok()
             .header("X-Total-Count", String.valueOf(labels.size()))
-            .body(labelsFiltered);
+            .body(labels);
     }
 
     @GetMapping("/{id}")

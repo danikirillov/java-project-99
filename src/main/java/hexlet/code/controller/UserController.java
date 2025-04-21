@@ -29,13 +29,9 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<UserResponse>> getAllUsers(
-        @RequestParam(defaultValue = "1") Integer page,
-        @RequestParam(defaultValue = "10") Integer limit) {
+    public ResponseEntity<List<UserResponse>> getAllUsers() {
         var users = userService.getAllUsers();
-        var skip = (page - 1) * limit;
-        var usersFiltered = users.stream().skip(skip).limit(limit).toList();
-        return ResponseEntity.ok().header("X-Total-Count", String.valueOf(users.size())).body(usersFiltered);
+        return ResponseEntity.ok().header("X-Total-Count", String.valueOf(users.size())).body(users);
     }
 
     @GetMapping("/{id}")

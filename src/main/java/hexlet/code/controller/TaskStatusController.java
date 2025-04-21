@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,15 +27,11 @@ public class TaskStatusController {
     private final TaskStatusService taskStatusService;
 
     @GetMapping
-    public ResponseEntity<List<TaskStatusResponse>> getAll(
-        @RequestParam(defaultValue = "1") Integer page,
-        @RequestParam(defaultValue = "10") Integer limit) {
+    public ResponseEntity<List<TaskStatusResponse>> getAll() {
         var statuses = taskStatusService.getAllTaskStatuses();
-        var skip = (page - 1) * limit;
-        var statusesFiltered = statuses.stream().skip(skip).limit(limit).toList();
         return ResponseEntity.ok()
             .header("X-Total-Count", String.valueOf(statuses.size()))
-            .body(statusesFiltered);
+            .body(statuses);
     }
 
     @GetMapping("/{id}")
