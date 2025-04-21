@@ -1,7 +1,5 @@
 FROM gradle:latest
 
-WORKDIR /app
-
 COPY / .
 
 RUN gradle installDist

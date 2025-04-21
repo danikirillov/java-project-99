@@ -68,8 +68,7 @@ dependencies {
 	
 	runtimeOnly(libs.h2)
 	runtimeOnly(libs.postgresql)
-//	developmentOnly("org.springframework.boot:spring-boot-devtools")
-	
+
 	// Test dependencies
 	testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.spring.security.test)
