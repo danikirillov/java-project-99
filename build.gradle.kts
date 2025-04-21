@@ -89,3 +89,7 @@ tasks.test {
 		showStandardStreams = true
 	}
 }
+
+tasks.sentryBundleSourcesJava {
+	enabled = System.getenv("SENTRY_AUTH_TOKEN") != null
+}
