@@ -87,11 +87,9 @@ class UserControllerTest {
             .getResponse();
         var body = response.getContentAsString();
 
-        List<UserResponse> userDTOS = om.readValue(body, new TypeReference<>() {
+        List<UserResponse> actual = om.readValue(body, new TypeReference<>() {
         });
-
-        var actual = userDTOS.stream().map(userMapper::toEntity).toList();
-        var expected = userRepository.findAll();
+        var expected = userRepository.findAll().stream().map(userMapper::toResponse).toList();
         Assertions.assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
     }
 

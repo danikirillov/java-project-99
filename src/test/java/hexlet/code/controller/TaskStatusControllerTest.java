@@ -87,11 +87,10 @@ class TaskStatusControllerTest {
             .getResponse();
         var body = response.getContentAsString();
 
-        List<TaskStatusResponse> statusDtos = om.readValue(body, new TypeReference<>() {
+        List<TaskStatusResponse> actual = om.readValue(body, new TypeReference<>() {
         });
 
-        var actual = statusDtos.stream().map(taskStatusMapper::toEntity).toList();
-        var expected = taskStatusRepository.findAll();
+        var expected = taskStatusRepository.findAll().stream().map(taskStatusMapper::toDto).toList();
         Assertions.assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
     }
 

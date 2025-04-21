@@ -28,8 +28,6 @@ public abstract class UserMapper {
 
     public abstract User toEntity(UserCreateRequest dto);
 
-    public abstract User toEntity(UserResponse dto);
-
     public abstract UserResponse toResponse(User entity);
 
     public abstract void updateEntity(@MappingTarget User entity, UserUpdateRequest dto);
