@@ -39,9 +39,6 @@ public class Label implements BaseEntity {
     @Size(min = 3, max = 1000)
     private String name;
 
-    @Column(nullable = false)
-    private String color;
-
     @CreatedDate
     private LocalDate createdAt;
 } 

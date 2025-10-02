@@ -17,7 +17,6 @@ import hexlet.code.repository.LabelRepository;
 import hexlet.code.testutil.TestModelGenerator;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openapitools.jackson.nullable.JsonNullable;
@@ -50,7 +49,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Transactional
 class TaskControllerTest {
 
     @Autowired
@@ -134,6 +132,14 @@ class TaskControllerTest {
         taskRepository.save(testTask2);
 
         token = jwt().jwt(builder -> builder.subject(testUser.getEmail()));
+    }
+
+    @AfterEach
+    void clean() {
+        taskRepository.deleteAll();
+        taskStatusRepository.deleteAll();
+        userRepository.deleteAll();
+        labelRepository.deleteAll();
     }
 
     @Test

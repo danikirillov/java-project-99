@@ -12,5 +12,4 @@ public class LabelUpdateRequest {
     @Size(min = 3, max = 1000)
     @NotBlank
     private JsonNullable<String> name;
-    private JsonNullable<String> color;
 } 

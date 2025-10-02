@@ -9,7 +9,6 @@ import hexlet.code.mapper.LabelMapper;
 import hexlet.code.model.Label;
 import hexlet.code.repository.LabelRepository;
 import hexlet.code.testutil.TestModelGenerator;
-import jakarta.transaction.Transactional;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,7 +38,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Transactional
 class LabelControllerTest {
 
     @Autowired
@@ -76,6 +74,11 @@ class LabelControllerTest {
         token = jwt().jwt(builder -> builder.subject("admin@ad.min"));
     }
 
+    @AfterEach
+    void clean() {
+        labelRepository.deleteAll();
+    }
+
     @Test
     void testIndex() throws Exception {
         var response = mockMvc.perform(get("/api/labels").with(jwt()))
@@ -106,7 +109,6 @@ class LabelControllerTest {
 
         var request = new LabelCreateRequest();
         request.setName(label.getName());
-        request.setColor(label.getColor());
 
         mockMvc.perform(post("/api/labels")
                 .with(token)
@@ -158,7 +160,8 @@ class LabelControllerTest {
         var request = delete("/api/labels/" + testLabel.getId())
             .with(token);
         mockMvc.perform(request)
-            .andExpect(status().isMethodNotAllowed());
-        // Удаление запрещено, поэтому не проверяем отсутствие в репозитории
+            .andExpect(status().isNoContent());
+
+        assertThat(labelRepository.existsById(testLabel.getId())).isFalse();
     }
 } 
