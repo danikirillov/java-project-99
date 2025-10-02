@@ -75,6 +75,7 @@ public class DefaultDataInitializer implements ApplicationRunner {
             if (labelRepository.findByName(labelName).isEmpty()) {
                 var label = new Label();
                 label.setName(labelName);
+                label.setColor("#cccccc"); // default color
                 labelRepository.save(label);
             }
         });

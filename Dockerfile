@@ -1,7 +1,36 @@
-FROM gradle:latest
+FROM node:20.6.1 AS frontend
 
-COPY / .
+WORKDIR /frontend
 
-RUN gradle installDist
+COPY frontend/package*.json .
 
-CMD ./build/install/app/bin/app
+RUN npm ci
+
+COPY frontend /frontend
+
+RUN npm run build
+
+FROM eclipse-temurin:21-jdk
+
+RUN apt-get update && apt-get install -yq make unzip
+
+WORKDIR /backend
+
+COPY gradle gradle
+COPY build.gradle.kts .
+COPY settings.gradle.kts .
+COPY gradlew .
+
+RUN ./gradlew --no-daemon dependencies
+
+COPY lombok.config .
+COPY src src
+
+COPY --from=frontend /frontend/dist /backend/src/main/resources/static
+
+RUN ./gradlew --no-daemon build
+
+ENV JAVA_OPTS "-Xmx512M -Xms512M"
+EXPOSE 8080
+
+CMD java -jar build/libs/HexletSpringBlog-1.0-SNAPSHOT.jar

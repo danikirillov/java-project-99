@@ -11,4 +11,6 @@ public class LabelCreateRequest {
     @Size(min = 3, max = 1000)
     @NotBlank
     private String name;
+    @NotBlank
+    private String color;
 } 

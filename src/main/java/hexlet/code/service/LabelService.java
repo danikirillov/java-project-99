@@ -49,13 +49,6 @@ public class LabelService {
 
     @Transactional
     public void deleteLabel(Long id) {
-        var label = labelRepository.findById(id)
-            .orElseThrow(() -> new LabelNotFoundException(id));
-
-        if (taskRepository.existsByLabelsContains(label)) {
-            throw new HasTasksException(id);
-        }
-
-        labelRepository.delete(label);
+        throw new UnsupportedOperationException("Удаление Label запрещено");
     }
 } 
